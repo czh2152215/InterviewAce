@@ -1,0 +1,33 @@
+div {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+p {
+  word-wrap: break-word;
+}
+/* 定义滚动条的宽度和高度 */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* 定义滚动条的轨道背景 */
+::-webkit-scrollbar-track {
+  background-color: #7d46da;
+}
+
+/* 定义滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: #93d9ff;
+  border-radius: 4px;
+}
+
+/* 定义滚动条的滑块悬停样式 */
+::-webkit-scrollbar-thumb:hover {
+}
