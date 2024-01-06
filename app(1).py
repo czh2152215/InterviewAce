@@ -8,7 +8,7 @@ from flask import (
 )
 
 os.environ["OPENAI_API_BASE"] = "https://openai.451024.xyz/v1"
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 
 chatModel = ChatOpenAI(model_name="gpt-4",streaming=True)
 app = Flask(__name__, instance_relative_config=True)

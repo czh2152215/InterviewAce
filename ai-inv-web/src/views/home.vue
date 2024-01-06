@@ -61,7 +61,7 @@
         style="display: flex; align-items: center; width: 100%; height: 50px"
       >
         <div style="color: black; margin-right: 10px; line-height: 50px">
-          Search Target Company
+          Search
         </div>
         <el-input
           v-model="company"
@@ -160,12 +160,13 @@
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">我在想想</el-button>
-          <el-button @click="gotoInterviewRoom"> 出发 </el-button>
+          <el-button @click="dialogVisible = false">Wait</el-button>
+          <el-button @click="gotoInterviewRoom"> Start </el-button>
         </span>
       </template>
     </el-dialog>
   </div>
+  
 </template>
 
 <script setup>

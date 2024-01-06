@@ -17,6 +17,7 @@
     "babel-preset-env": "^1.7.0",
     "crypto-js": "^4.2.0",
     "cryptojs": "^2.5.3",
+    "echarts": "^5.4.3",
     "element-plus": "^2.4.3",
     "jquery": "^3.5.1",
     "less": "^4.2.0",
@@ -25,6 +26,7 @@
     "rollup-plugin-uglify": "^6.0.4",
     "uuid": "^9.0.1",
     "vue": "^3.3.8",
+    "vue-echarts": "^6.6.8",
     "vue-router": "^4.2.5",
     "vue3-mindmap": "^0.5.12",
     "vuex": "^4.0.2"

@@ -2,6 +2,19 @@
   <div class="transcriptContainer">
     <!-- 整体成绩单-几个大字 -->
     <div class="columnName">OverAll Transcript</div>
+    <div class="chartContainer">
+      <div class="textContainer">
+        <!-- 在这里添加您想显示的文字 -->
+        <h2 >Six-Criteria Evaluation</h2>
+        <p>1. Problem Solving: 3.6/5</p>
+        <p>2. Culture Fit: 3/5</p>
+        <p>3. Relevance to JD: 5/5</p>
+        <p>4. Technology Skill: 2/5</p>
+        <p>5. Communication Skill: 1.2/5</p>
+        <p>6. PLeaderShip: 2.4/5</p>
+      </div>
+      <div class="echartsArea" ref="echartsRef"></div>
+    </div>
 
     <el-collapse v-model="activeIndex" accordion>
       <el-collapse-item
@@ -27,8 +40,10 @@
                 </div>
                 <img :src="Talker" alt="" width="50" style="flex-shrink: 0" />
               </div>
-            </div></div
-        ></template>
+
+            </div>
+          </div>
+        </template>
 
         <div class="content2">
           <div v-show="lookType == 'aiComment'" class="innerContent">
@@ -50,8 +65,12 @@
             </div>
           </div>
           <div v-show="lookType == 'tryAgain'" class="innerContent">
-            tryAgain{{ activeIndex }}
+            <div class="goodTextContainer">{{ talk.ai }}</div>
+            <div class="badTextContainer">
+              <img src="../assets/speakbtn.png" alt="Speak Icon" class="speakbtn"/> <!-- 图标图片 -->
+            </div>
           </div>
+          
         </div>
         <div class="tabbar">
           <div
@@ -76,9 +95,12 @@
             Try Again
           </div>
         </div>
+        
       </el-collapse-item>
     </el-collapse>
+    
   </div>
+
 </template>
 
 <script setup>
@@ -88,8 +110,50 @@ import { ref, watch, onMounted } from "vue";
 import MindMap from "../components/mindmap.vue";
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import * as echarts from 'echarts';
 const store = useStore();
 const interviewHistory = computed(() => store.state.interviewHistory);
+const echartsRef = ref(null); // 创建一个 ref 用于 ECharts 容器
+let myChart = null; // 用于存储 ECharts 实例的变量
+
+// 初始化 ECharts 图表的方法
+function initECharts() {
+  if (echartsRef.value) {
+    myChart = echarts.init(echartsRef.value);
+    // 设置图表配置项
+    const option = {
+      polar: {
+        radius: [30, '80%']
+      },
+      radiusAxis: {
+        max: 5
+      },
+      angleAxis: {
+        type: 'category',
+        data: [' Cultural Fit','Relevance to JD','Technology Skill', 'Communication Skill', 'Leadership', 'Problem-Solving'],
+        startAngle: 75
+      },
+      tooltip: {},
+      series: {
+        type: 'bar',
+        data: [3, 5, 2, 1.2, 2.4, 3.6],
+        coordinateSystem: 'polar',
+        // label: {
+        //   show: true,
+        //   position: 'middle', // or 'start', 'insideStart', 'end', 'insideEnd'
+        //   formatter: '{b}: {c}'
+        // }
+      },
+      animation: false
+    };
+    myChart.setOption(option);
+  }
+}
+
+// 在组件挂载时初始化图表
+onMounted(() => {
+  initECharts();
+});
 
 const data = [
   {
@@ -149,34 +213,78 @@ const data = [
     ],
   },
 ];
+// const lookType = ref("aiRecommend");
+// const activeIndex = ref();
+// const fakeTalksList = computed(() => {
+//   const talks = [];
+//   const history = interviewHistory.value;
+
+//   for (let i = 0; i < history.length; i += 2) {
+//     const aiTalk = history[i] ? history[i].text : "";
+//     const meTalk = history[i + 1] ? history[i + 1].text : "";
+
+//     talks.push({
+//       ai: aiTalk,
+//       me: meTalk,
+//       aiCommentData: {
+//         good: "", // 需要填充或从其他地方获取
+//         bad: "",  // 同上
+//       },
+//       aiRecommendData: {
+//         text: "", // 同上
+//         text2: "", // 同上
+//         data: [], // 同上
+//       },
+//     });
+//   }
+
+//   return talks;
+// });
+
 
 const lookType = ref("aiRecommend");
 const activeIndex = ref();
-const fakeTalksList = computed(() => {
-  const talks = [];
-  const history = interviewHistory.value;
-
-  for (let i = 0; i < history.length; i += 2) {
-    const aiTalk = history[i] ? history[i].text : "";
-    const meTalk = history[i + 1] ? history[i + 1].text : "";
-
-    talks.push({
-      ai: aiTalk,
-      me: meTalk,
-      aiCommentData: {
-        good: "", // 需要填充或从其他地方获取
-        bad: "",  // 同上
-      },
-      aiRecommendData: {
-        text: "", // 同上
-        text2: "", // 同上
-        data: [], // 同上
-      },
-    });
-  }
-
-  return talks;
-});
+const fakeTalksList = ref([
+  {
+    ai: "Welcome to our company's interview. Please start by briefly introducing yourself。",
+    me: "Thank you very much, I am thrilled to have the opportunity to participate in this interview. My name is Jason, and I am currently enrolled in the MSCS program at Columbia University. Throughout my university career, I have been actively involved in front-end development, primarily focusing on coding and development testing. I am passionate about this industry and hope to develop and contribute my professional knowledge and skills at your esteemed company.",
+    aiCommentData: {
+      good: "",
+      bad: "",
+    },
+    aiRecommendData: {
+      text: "",
+      text2: "",
+      data: [],
+    },
+  },
+  {
+    ai: "Very good. What challenges have you encountered in your past work, and how did you resolve them",
+    me: "In my previous role, I faced a challenging situation with an urgent project deadline. With time being of the essence and the workload being substantial, I realized that measures were needed to enhance efficiency. My first step was to communicate with team members, clarifying each person's tasks and timeline, and establishing a clear project plan. I also assessed task priorities, delegating key tasks to the most experienced members, and ensured regular progress tracking and communication. Ultimately, we successfully delivered the project on time.",
+    aiCommentData: {
+      good: "",
+      bad: "",
+    },
+    aiRecommendData: {
+      text: "",
+      text2: "",
+      data: [],
+    },
+  },
+  {
+    ai: "Understood. Could you please share some of your experiences with front-end projects that you have worked on?",
+    me: "Sure, I have been involved in several front-end development projects, but the one that stands out most to me was a news publishing management platform system I worked on during my junior year of undergraduate studies. The primary goal of this project was to design a Souyuan news publishing platform based on the Vue framework, aimed at solving the inconvenience and lack of informatization in campus news publishing. The system utilized a MySQL database, and I used the Vue framework in JavaScript for front-end development, and Node.js for server-side functionalities. The project was successfully completed with software testing. In terms of development methodology, we mainly adopted an agile approach, continuously iterating and refining the system's features and interface design based on feedback",
+    aiCommentData: {
+      good: "",
+      bad: "",
+    },
+    aiRecommendData: {
+      text: "",
+      text2: "",
+      data: [],
+    },
+  },
+]);
 
 watch(lookType, (newValue, oldValue) => {
   if (newValue == "aiComment") {
@@ -261,8 +369,10 @@ watch(lookType, (newValue, oldValue) => {
     }
   } else if (newValue == "tryAgain") {
     console.log("tryAgain:" + activeIndex.value);
+    
   }
 });
+
 watch(activeIndex, (newValue, oldValue) => {
   if (
     activeIndex.value !== "" &&
@@ -382,6 +492,42 @@ watch(activeIndex, (newValue, oldValue) => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  
+  .chartContainer {
+    display: flex; /* 设置为 Flexbox 布局 */
+    justify-content: space-between; /* 子元素间隔开 */
+    align-items: center; /* 居中对齐子元素 */
+    width: 100%;
+    height: 400px;
+    background-color: #f2e4fa;
+    position: relative;
+      border: 1px solid red;
+      overflow: visible;
+      border-radius: 5px;
+      border: 2px solid rgb(0, 0, 0);
+      font-size: 1.2rem;
+      line-height: 1.25;
+      text-align: left;
+  }
+
+  .textContainer {
+    height: 100%;
+    padding: 1rem;
+    width: 49%;
+    background-color: #dae3f5;
+    
+    border-radius: 5px;
+    margin-bottom: 3px;
+  }
+
+  .echartsArea {
+    height: 100%;
+    padding: 1rem;
+    width: 49%;
+    background-color: #fce6d5;
+    border-radius: 5px;
+    margin-bottom: 3px;
+  }
   .columnName {
     font-size: 1.5rem;
     color: whitesmoke;
@@ -430,7 +576,7 @@ watch(activeIndex, (newValue, oldValue) => {
     .innerContent {
       min-height: 15rem;
       width: 100%;
-      display: flex;
+      display:flex;
       justify-content: space-around;
       .goodTextContainer {
         padding: 1rem;
@@ -440,6 +586,7 @@ watch(activeIndex, (newValue, oldValue) => {
         margin-bottom: 3px;
       }
       .badTextContainer {
+        position: relative;
         padding: 1rem;
         width: 49%;
         background-color: #fce6d5;
@@ -461,7 +608,16 @@ watch(activeIndex, (newValue, oldValue) => {
         border-radius: 20px;
         margin-bottom: 3px;
       }
+      
     }
+  }
+
+  .badTextContainer .speakbtn {
+    position: absolute;
+    right: 20px; /* 根据需要调整这个值 */
+    bottom: 10px; /* 根据需要调整这个值 */
+    width: 40px; /* 根据图标的尺寸调整 */
+    height: auto; /* 根据图标的尺寸调整 */
   }
   .tabbar {
     // height: ;
@@ -486,5 +642,6 @@ watch(activeIndex, (newValue, oldValue) => {
       background-color: #413adc;
     }
   }
+  
 }
 </style>

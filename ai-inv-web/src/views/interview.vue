@@ -382,14 +382,14 @@ watch(showInterviewerVedio, (newValue, oldValue) => {
         height: 49%;
         border: 8px solid whitesmoke;
         border-radius: 8px;
-        background-image: url(../assets/vedioback.jpeg);
+        
       }
       .mevedio {
         width: 100%;
         height: 49%;
         border: 8px solid whitesmoke;
         border-radius: 8px;
-        background-image: url(../assets/vedioback.jpeg);
+        
       }
     }
     .bottomright {
